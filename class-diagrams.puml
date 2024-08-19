@@ -1,0 +1,144 @@
+@startuml Growers.IO
+
+class Container {
+    Key: String
+    Name: String
+
+    DeviceId: String
+    ClientService: IoTClientService
+    
+    Plant: Plant
+    GeoLocation: Location
+    Security: Security
+}
+Container -- IHasUKey
+
+class Plant {
+    Plant()
+
+    Temperature: IEnumerable<Reading<double>>
+    Humidity: IEnumerable<Reading<double>>
+    WaterLevel: IEnumerable<Reading<double>>
+    SoilMoisture: IEnumerable<Reading<int>>
+
+    Fan: Actuator
+    Light: Actuator
+}
+
+class GeoLocation {
+    GeoLocation()
+
+    GPSLongitude: IEnumerable<Reading<double>>
+    GPSLatitude: IEnumerable<Reading<double>>
+    Pitch: IEnumerable<Reading<double>>
+    Yaw: IEnumerable<Reading<double>>
+    Roll: IEnumerable<Reading<double>>
+    AccelerationX: IEnumerable<Reading<double>>
+    AccelerationY: IEnumerable<Reading<double>>
+    AccelerationZ: IEnumerable<Reading<double>>
+
+    Buzzer: Actuator
+}
+
+class Security {
+    Security()
+
+    NoiseLevel: IEnumerable<Reading<int>>
+    Luminosity: IEnumerable<Reading<int>>
+    Motion: IEnumerable<Reading<bool>>
+    DoorState: IEnumerable<Reading<bool>>
+
+    DoorLock: Actuator
+    Buzzer: Actuator
+}
+
+class Actuator {
+    Actuator(type: CommandType)
+
+    Type: CommandType
+    TypeLower: String
+    CurrentValue: bool
+
+    SendCommand(client: IoTClientService): Task<(bool, string)
+    GetLatestState(client: IoTClientService): Task<(bool, string)
+
+    GetMessage(state: bool)
+    Commands(): string[]
+}
+
+class Reading<T> {
+    Type: ReadingType
+    Value: T
+    Unit: String
+    TimeStamp: DateTime
+}
+
+enum ReadingType {
+    Temperature
+    Humidity
+    WaterLevel
+    SoilMoisture
+    NoiseLevel
+    Luminosity
+    Motion
+    DoorState
+    GPSLongitude
+    GPSLatitude
+    Pitch
+    Yaw
+    Roll
+    AccelerationX
+    AccelerationY
+    AccelerationZ
+}
+
+enum CommandType {
+    Buzzer
+    Servo
+    Led
+    Fan
+}
+
+class UserToContainer {
+    Key: String
+    OwnerUID: String
+    FarmerUIDs: IEnumerable<String>
+    ContainerKey: String
+}
+UserToContainer -- IHasUKey
+UserToContainer ||--|| Container
+UserToContainer ||--|{ UserInfo
+
+class UserInfo {
+    Key: String
+    UID: String
+    IsTechnician: bool
+    Name: String
+}
+UserInfo -- IHasUKey
+
+interface IHasUKey {
+    Key: String
+}
+
+class PlantDataRepo {
+  PlantSubsystems: Dictionary<string, Plant>
+  GetSubsystemFromDeviceId(deviceId: String): Plant
+}
+class GeoLocationDataRepo {
+  GeoLocationSubsystems: Dictionary<string, GeoLocation>
+  GetSubsystemFromDeviceId(deviceId: String): GeoLocation
+}
+class SecurityDataRepo {
+  SecurityDataRepoSubsystems: Dictionary<string, Security>
+  GetSubsystemFromDeviceId(deviceId: String): Security
+}
+
+PlantDataRepo -- ISubsystemRepo
+GeoLocationDataRepo -- ISubsystemRepo
+SecurityDataRepo -- ISubsystemRepo
+
+interface ISubsystemRepo<T> {
+    AddReading<C>(reading: Reading<C>, deviceId: String)
+    GetSubsystemFromDeviceId(deviceId: String): T
+}

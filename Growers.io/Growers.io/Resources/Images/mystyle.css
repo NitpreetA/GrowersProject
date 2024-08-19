@@ -1,0 +1,31 @@
+body
+{
+    margin:0%;
+    padding: 0%;
+}
+#name{
+    background-color: aqua;
+    margin:0%;
+    padding: 0%;
+}
+#name h1{
+    margin: auto;
+    text-align: center;
+}
+.column
+{
+    flex: 1;
+    padding: 10px;
+    border: 1px solid black;
+
+}
+.row{
+    display: flex;
+    background-color: blue;
+}
+#column p
+{
+    margin:0%;
+    padding: 0%;
+    color: antiquewhite;
+}

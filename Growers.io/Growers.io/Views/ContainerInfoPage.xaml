@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:charts="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+             xmlns:tabs="http://sharpnado.com"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewmodel ="clr-namespace:Growers.io.ViewModels"
+             xmlns:converter="clr-namespace:Growers.io.Converters"
+             x:Class="Growers.io.Views.ContainerInfoPage"
+             
+             Title="Container Info">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" >
+
+            <tabs:TabHostView x:Name="TabHost"
+                    Grid.Row="4"
+                    HeightRequest="50"
+                    Margin="15,15,20,0"
+                    VerticalOptions="Center"
+                    BackgroundColor="White"
+                    CornerRadius="20"
+                    IsSegmented="True"
+                    SegmentedHasSeparator="True"
+                    SegmentedOutlineColor="LimeGreen"
+                    TabType="Fixed">
+                <tabs:TabHostView.Tabs>
+                    <tabs:MaterialUnderlinedTabItem IconImageSource="lock.png"  IconOptions="LeadingIcon" IconSize="24" IconTextSpacing="0"  Label="Security" IsVisible="{Binding CurrentUser.IsTechician,Converter={converter:NotConverter}}"/>
+                    <tabs:MaterialUnderlinedTabItem IconImageSource="picon.png" IconOptions="LeadingIcon" IconSize="24" IconTextSpacing="0" Label="Plant" />
+                    <tabs:MaterialUnderlinedTabItem IconImageSource="gicon.png" IconOptions="LeadingIcon" IconSize="24" IconTextSpacing="0" Label="Geo-Location" IsVisible="{Binding CurrentUser.IsTechician,Converter={converter:NotConverter}}" />
+                </tabs:TabHostView.Tabs>
+            </tabs:TabHostView>
+
+            <Label Text="{Binding ContainerHeader}" FontSize="Large" HorizontalOptions="Center"/>
+
+            <VerticalStackLayout>
+                <Label Text="Control Panel" Margin="10" FontAttributes="Italic,Bold" FontSize="24"></Label>
+                <Frame Margin="10" BackgroundColor="LightGray">
+                    <VerticalStackLayout>
+                        <HorizontalStackLayout Spacing="20">
+                            <VerticalStackLayout>
+                                <HorizontalStackLayout Spacing="5">
+                                    <Image Source="buzzer.png" WidthRequest="30" ></Image>
+                                    <Label Text="{Binding Container.Security.Buzzer.Type}" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="50"></Label>
+                                    <Switch IsToggled="{Binding Container.Security.Buzzer.CurrentValue}">
+                                        <Switch.Behaviors>
+                                            <toolkit:EventToCommandBehavior
+                                                EventName="Toggled"
+                                                Command="{Binding ToggleSwitchCommand}"
+                                                CommandParameter="{Binding Container.Security.Buzzer}"/>
+                                        </Switch.Behaviors>
+                                    </Switch>
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout Spacing="5">
+                                    <Image Source="servo.png" WidthRequest="30"></Image>
+                                    <Label Text="{Binding Container.Security.DoorLock.Type}" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="50"></Label>
+                                    <Switch IsToggled="{Binding Container.Security.DoorLock.CurrentValue}">
+                                        <Switch.Behaviors>
+                                            <toolkit:EventToCommandBehavior
+                                                EventName="Toggled"
+                                                Command="{Binding ToggleSwitchCommand}"
+                                                CommandParameter="{Binding Container.Security.DoorLock}"/>
+                                        </Switch.Behaviors>
+                                    </Switch>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout>
+                                <HorizontalStackLayout Spacing="5">
+                                    <Image Source="fan.png" WidthRequest="30"></Image>
+                                    <Label Text="{Binding Container.Plant.Fan.Type}" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="50"></Label>
+                                    <Switch IsToggled="{Binding Container.Plant.Fan.CurrentValue}">
+                                        <Switch.Behaviors>
+                                            <toolkit:EventToCommandBehavior
+                                                 EventName="Toggled"
+                                                 Command="{Binding ToggleSwitchCommand}"
+                                                 CommandParameter="{Binding Container.Plant.Fan}"/>
+                                        </Switch.Behaviors>
+                                    </Switch>
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout Spacing="5">
+                                    <Image Source="led.png" WidthRequest="30"></Image>
+                                    <Label Text="{Binding Container.Plant.Light.Type}" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="50"></Label>
+                                    <Switch IsToggled="{Binding Container.Plant.Light.CurrentValue}">
+                                        <Switch.Behaviors>
+                                            <toolkit:EventToCommandBehavior
+                                                 EventName="Toggled"
+                                                 Command="{Binding ToggleSwitchCommand}"
+                                                 CommandParameter="{Binding Container.Plant.Light}"/>
+                                        </Switch.Behaviors>
+                                    </Switch>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                        <Label Text="Telemetry Interval:"/>
+                        <Entry Text="{Binding TelemetryInterval}" Keyboard="Numeric" WidthRequest="100" HorizontalOptions="Start">
+                            <Entry.Behaviors>
+                                <toolkit:EventToCommandBehavior
+                                     EventName="Completed"
+                                     Command="{Binding UpdateTelemetryIntervalCommand}"/>
+                            </Entry.Behaviors>
+                        </Entry>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+           
+            <ContentView x:Name="SecurityContent" IsVisible="{Binding Source={x:Reference TabHost}, Path=SelectedIndex, Converter={converter:IndexToVis}, ConverterParameter=0}">
+                <VerticalStackLayout>
+                    <Label Text="Security" FontSize="24" HorizontalTextAlignment="Center"></Label>
+                    <VerticalStackLayout Spacing="20">
+                        <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                            <Frame BackgroundColor="#b0a9d3" WidthRequest="125" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Noise" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Security.NoiseLevel, Converter={converter:LastElementConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                            <Frame BackgroundColor="LightYellow" WidthRequest="125" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Luminosity" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Security.Luminosity, Converter={converter:LastElementConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                            <Frame BackgroundColor="LightCyan" WidthRequest="125" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Motion" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Security.Motion, Converter={converter:MotionConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                            <Frame BackgroundColor="LightSalmon" WidthRequest="125" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Door State" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Security.DoorState, Converter={converter:DoorStateConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <CarouselView ItemsSource="{Binding SecurityChart}" IndicatorView="indicatorView" HeightRequest="400">
+                        <CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout>
+                                    <charts:CartesianChart 
+                                        Series="{Binding Series}" 
+                                        XAxes="{Binding XAxes}" 
+                                        YAxes="{Binding YAxes}"
+                                        Title="{Binding Title}"
+                                        Sections="{Binding Sections}"
+                                        HeightRequest="280"
+                                        ZoomMode="X"/>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CarouselView.ItemTemplate>
+                    </CarouselView>
+                    <IndicatorView x:Name="indicatorView"
+                   Grid.Row="1"
+                   IndicatorColor="LightGray"
+                   SelectedIndicatorColor="DarkGray"
+                   HorizontalOptions="Center" />
+             
+            <StackLayout HorizontalOptions="Center">
+            <!--
+                <Label Text="{Binding SecurityLastUpdated, StringFormat='Last Updated: {0}'}" Padding="5"></Label>
+                -->
+            </StackLayout>
+                </VerticalStackLayout>
+            </ContentView>
+
+            <ContentView x:Name="PlantContent" IsVisible="{Binding Source={x:Reference TabHost}, Path=SelectedIndex, Converter={converter:IndexToVis}, ConverterParameter=1}">
+                <VerticalStackLayout>
+                    <Label Text="Plant" FontSize="24" HorizontalTextAlignment="Center"></Label>
+                    <VerticalStackLayout Spacing="20">
+                        <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                            <Frame BackgroundColor="LightGreen" WidthRequest="125" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Temperature" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Plant.Temperature, Converter={converter:DoubleConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                            <Frame BackgroundColor="LightBlue" WidthRequest="125" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Humidity" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Plant.Humidity, Converter={converter:DoubleConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                            <Frame BackgroundColor="LightPink" WidthRequest="125" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Water Level" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Plant.WaterLevel, Converter={converter:LastElementConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                            <Frame BackgroundColor="PaleVioletRed" WidthRequest="125" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Soil Moisture" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Plant.SoilMoisture, Converter={converter:SoilMoistureConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <CarouselView ItemsSource="{Binding PlantChart}" IndicatorView="indicatorViewPlant" HeightRequest="400" >
+                        <CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout >
+                                    <charts:CartesianChart 
+                                         Series="{Binding Series}" 
+                                         XAxes="{Binding XAxes}" 
+                                         YAxes="{Binding YAxes}"
+                                         Title="{Binding Title}"
+                                         Sections="{Binding Sections}"
+                                         HeightRequest="280"
+                                         ZoomMode="PanX"/>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CarouselView.ItemTemplate>
+                    </CarouselView>
+
+                    <IndicatorView x:Name="indicatorViewPlant"
+                        Grid.Row="1"
+                        IndicatorColor="LightGray"
+                        SelectedIndicatorColor="DarkGray"
+                        HorizontalOptions="Center" />
+
+                    <StackLayout HorizontalOptions="Center">
+                    <!--
+                        <Label Text="{Binding PlantLastUpdated, StringFormat='Last Updated: {0}'}" Padding="5"></Label>
+                        -->
+                    </StackLayout>
+
+                </VerticalStackLayout>
+            </ContentView>
+
+
+            <ContentView x:Name="GeoLocationContent" IsVisible="{Binding Source={x:Reference TabHost}, Path=SelectedIndex, Converter={converter:IndexToVis}, ConverterParameter=2}">
+                <VerticalStackLayout>
+                    <Label Text="Geo-Location" FontSize="24" HorizontalTextAlignment="Center"></Label>
+                    <VerticalStackLayout Spacing="20">
+                        <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                            <Frame BackgroundColor="#f489a7" WidthRequest="110" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Pitch" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Location.Pitch, Converter={converter:DoubleConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                            <Frame BackgroundColor="#aed361" WidthRequest="110" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Yaw" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Location.Yaw, Converter={converter:DoubleConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                            <Frame BackgroundColor="#96d1f3" WidthRequest="110" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Roll" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Location.Roll, Converter={converter:DoubleConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                            <Frame BackgroundColor="#faf5b3" WidthRequest="110" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Accel. X" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Location.AccelerationX, Converter={converter:AccelConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                            <Frame BackgroundColor="#f68567" WidthRequest="110" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Accel. Y" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Location.AccelerationY, Converter={converter:AccelConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                            <Frame BackgroundColor="#abdac6" WidthRequest="110" HeightRequest="100">
+                                <VerticalStackLayout VerticalOptions="Center">
+                                    <Label Text="Accel. Z" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Container.Location.AccelerationZ, Converter={converter:AccelConverter}, StringFormat='{0}'}"></Label>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <CarouselView ItemsSource="{Binding GeoChart}" IndicatorView="indicatorViewGeo" HeightRequest="400" >
+                        <CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout>
+                                    <charts:CartesianChart 
+                                         Series="{Binding Series}" 
+                                         XAxes="{Binding XAxes}" 
+                                         YAxes="{Binding YAxes}"
+                                         Title="{Binding Title}"
+                                         Sections="{Binding Sections}"
+                                         HeightRequest="280"
+                                         ZoomMode="PanX"/>      
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CarouselView.ItemTemplate>
+                    </CarouselView>
+
+                    <IndicatorView x:Name="indicatorViewGeo"
+                        Grid.Row="1"
+                        IndicatorColor="LightGray"
+                        SelectedIndicatorColor="DarkGray"
+                        HorizontalOptions="Center" />
+                    <StackLayout HorizontalOptions="Center">
+                    <!--
+                        <Label Text="{Binding GeoLastUpdated, StringFormat='Last Updated: {0}'}" Padding="5"></Label>
+                        -->
+                    </StackLayout>
+                </VerticalStackLayout>
+            </ContentView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

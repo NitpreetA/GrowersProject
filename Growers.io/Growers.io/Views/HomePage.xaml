@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
+             x:Class="Growers.io.Views.HomePage"
+             Title="Home">
+
+    
+    <VerticalStackLayout Spacing="15">
+
+        <Label x:Name="usergreeting" Text="{Binding UserCreds.User.Info.DisplayName,StringFormat='Welcome {0}'}"  FontSize="26" FontAttributes="Bold" Margin="6"> </Label>
+        <maps:Map x:Name="map" HeightRequest="400" Margin="6"/>
+        <Frame HeightRequest="60" Margin="5" BorderColor="Black" >
+            <Label Text="Click a container in the map to see more details."> </Label> 
+        </Frame>
+        <AbsoluteLayout Padding="10">
+            <Button Text="Add Container" x:Name="AddContainer" Clicked="AddContainer_Clicked"></Button>
+        </AbsoluteLayout>
+
+    </VerticalStackLayout>
+</ContentPage>

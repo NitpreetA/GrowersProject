@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Growers.io.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Growers.io"
+    xmlns:views="clr-namespace:Growers.io.Views"
+    Shell.FlyoutBehavior="Flyout">
+    
+    
+    <Shell.FlyoutHeader>
+        <Image Source="flyouticon.png" HeightRequest="150" Margin="10"></Image>
+    </Shell.FlyoutHeader>
+    <Shell.FlyoutFooter>
+        <Button Text="Log out" x:Name="Btn_logOut" Clicked="Btn_logOut_Clicked" ></Button>
+    </Shell.FlyoutFooter>
+
+    <ShellContent
+        FlyoutItemIsVisible="False"
+    Title="Welcone"
+    ContentTemplate="{DataTemplate views:WelcomePage}"
+    Route="MainPage" />
+
+
+    <FlyoutItem Route="Tech" Title="Home" x:Name="techtab" Icon="home.png">
+        
+        <ShellContent
+         Title="Home"
+         Icon="home.png"
+         ContentTemplate="{DataTemplate views:HomePage}"
+         Route="HomePage" />
+       
+    
+        <ShellContent
+        Title="Containers"
+        Icon="container.png"
+        ContentTemplate="{DataTemplate views:ContainersPage}"
+        Route="ContainersPage" />
+
+    </FlyoutItem>
+
+    <FlyoutItem Route="Farmer" Title="Home" x:Name="farmertab" Icon="home.png">
+
+        <ShellContent
+     Title="Home"
+     Icon="home.png"
+     ContentTemplate="{DataTemplate views:FarmerHome}"
+     Route="HomePage" />
+
+
+        <ShellContent
+    Title="Containers"
+    Icon="container.png"
+    ContentTemplate="{DataTemplate views:ContainersPage}"
+    Route="ContainersPage" />
+
+    </FlyoutItem>
+
+
+    <ShellContent 
+    Title="Profile"
+    Icon="profile.png"
+    ContentTemplate="{DataTemplate views:ProfilePage}"
+    Route="ProfilePage" />
+    
+   
+
+</Shell>

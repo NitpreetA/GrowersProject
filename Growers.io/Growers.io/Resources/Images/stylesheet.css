@@ -1,0 +1,53 @@
+body
+{
+    margin: 30px;;
+    padding: 10;
+}
+#name{
+    background-color: aqua;
+    margin:0%;
+    padding: 0%;
+}
+#name h1{
+    margin: auto;
+    text-align: center;
+}
+.column
+{
+    flex: 1;
+    padding: 10px;
+    border: 1px solid black;
+
+}
+.row{
+    display: flex;
+    flex-direction: row;
+    background-color: lightblue;
+    
+    
+    
+}
+#mommy{
+flex-grow: 0.25;
+
+}
+nav{
+    display: flex;
+    justify-content: right;
+    align-self:center;
+    flex-grow: 1;
+    justify-content: space-around;
+    
+}
+nav button{
+    margin: 20;
+    background: transparent;
+    border: none;
+    color: aliceblue;
+}
+#column p
+{
+    margin:0%;
+    padding: 0%;
+    color: rgb(194, 125, 34);
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:Growers.io.Converters"
+             x:Class="Growers.io.Views.FarmerHome"
+             Title="Home">
+    <Grid>
+        <CollectionView ItemsSource="{Binding Containers}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <ScrollView>
+                        <VerticalStackLayout>
+                            <Frame Margin="10">
+                                <StackLayout>
+                                    <Label Text="{Binding Name,StringFormat='Container Name: {0}'}" FontSize="Header" FontAttributes="Bold"></Label>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                    <Frame Margin="10" Grid.Row="0" Grid.Column="0">
+                                    <StackLayout >
+                                                <Image Source="thermometer.png" WidthRequest="30" Margin="10"/>
+                                            <Label Text="{Binding Plant.Temperature, Converter={converters:DoubleConverter},StringFormat='Temperature: {0}'}"></Label>
+                                    </StackLayout>
+                                    </Frame>
+                                    <!--Dial-->
+                                        <Frame Margin="10" Grid.Row="0" Grid.Column="1">
+                                            <StackLayout >
+                                                <Image Source="soil_moisture.png" WidthRequest="35" Margin="10"/>
+                                                <Label Text="{Binding Plant.SoilMoisture, Converter={converters:SoilMoistureConverter},StringFormat='Soil Moisture: {0} '}"></Label>
+                                            </StackLayout>
+                                        </Frame>
+                                        <!--Dial-->
+                                        <Frame Margin="10" Grid.Row="1" Grid.Column="0">
+                                            <StackLayout >
+                                                <Image Source="humidity.png" WidthRequest="30" Margin="10"/>
+                                                <Label Text="{Binding Plant.Humidity, Converter={converters:DoubleConverter},StringFormat='Humidity: {0}'}"></Label>
+                                            </StackLayout>
+                                        </Frame>
+                                        <!--Dial-->
+                                        <Frame Margin="10" Grid.Row="1" Grid.Column="1">
+                                            <StackLayout >
+                                                <Image Source="water_level.png" WidthRequest="30" Margin="10"/>
+                                                <Label Text="{Binding Plant.WaterLevel,Converter={converters:LastElementConverter}, StringFormat='Water Level: {0}'}"></Label>
+                                            </StackLayout>
+                                        </Frame>
+                                    </Grid>
+                                </StackLayout>
+                            </Frame>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

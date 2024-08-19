@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:Growers.io.DataRepos"
+             x:DataType="{x:Type model:UserInfoRepo}"
+             x:Class="Growers.io.Views.ProfilePage"
+             Title="Profile">
+    <AbsoluteLayout>
+
+        <Image Source="plant.png" Scale="0.95"></Image>
+        <StackLayout Padding="30" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="1,1,1,1">
+
+            <Label 
+            Text="{Binding UserCreds.User.Info.DisplayName, StringFormat='Hello, {0}!'}"
+            VerticalOptions="Center" 
+            HorizontalOptions="End"
+            FontSize="Large"
+            TextColor="ForestGreen"
+            />
+
+        <Label Text=""></Label>
+
+        <Label
+            Text="{Binding UserCreds.User.Uid, StringFormat='UserId: {0}'}"
+            VerticalOptions="Center" 
+            HorizontalOptions="End"
+            />
+
+        <Label Text=""></Label>
+
+        <Label 
+            Text="{Binding UserCreds.User.Info.Email, StringFormat='Email: {0}'}"
+            VerticalOptions="Center" 
+            HorizontalOptions="End"/>
+    </StackLayout>
+        <Image Source="plant_r.png" Scale="0.95" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="1, 1"></Image>
+    </AbsoluteLayout>
+</ContentPage>

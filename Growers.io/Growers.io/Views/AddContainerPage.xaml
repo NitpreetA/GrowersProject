@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Growers.io.Views.AddContainerPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewmodel ="clr-namespace:Growers.io.ViewModels"
+             xmlns:controls="clr-namespace:Microsoft.Maui.Controls.Compatibility;assembly=Microsoft.Maui.Controls.Compatibility"
+             Title="Create a Container">
+
+    <VerticalStackLayout Spacing="40" Margin="10">
+        <Image Source="flyouticon.png" HeightRequest="150"/>
+
+        <HorizontalStackLayout Spacing="10">
+            <Label HorizontalTextAlignment="Start" VerticalTextAlignment="Center" Text="Name" WidthRequest="75"/>
+            <Entry Placeholder="Name" WidthRequest="200" Text="{Binding ContainerName}"/>
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="10">
+            <Label HorizontalTextAlignment="Start" VerticalTextAlignment="Center" Text="Device ID" WidthRequest="75"/>
+            <Entry Placeholder="Device ID" WidthRequest="200" Text="{Binding DeviceID}"/>
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="10">
+            <Label Text="Farmer" HorizontalTextAlignment="Start" VerticalTextAlignment="Center" WidthRequest="75"/>
+            <CollectionView 
+                x:Name="Collection_Farmer"
+                ItemsSource="{Binding Users}"
+                SelectionMode="Multiple"
+                SelectionChangedCommandParameter="{Binding Source={x:Reference Collection_Farmer}}"
+                SelectionChangedCommand="{Binding SelectedFarmersChangedCommand}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding Name }"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </HorizontalStackLayout>
+        
+        
+
+        <Label Text="NOTE: All information such as location, temperature and controls will be added when container is created." LineHeight="1"/>
+
+        <Button Text="Add" Command="{Binding CreateContainerCommand}"/>
+    </VerticalStackLayout>
+</ContentPage>

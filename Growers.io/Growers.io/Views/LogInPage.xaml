@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Growers.io.Views.LogInPage"
+             Title=""
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:viewmodel ="clr-namespace:Growers.io.ViewModels"
+             xmlns:controls="clr-namespace:Microsoft.Maui.Controls.Compatibility;assembly=Microsoft.Maui.Controls.Compatibility">
+
+    <VerticalStackLayout Margin="20" Spacing="60">
+        <Label  Text="Log In" FontSize="41" FontAttributes="Bold" HorizontalTextAlignment="Center"></Label>
+        <Image Source="loginimg.png" HorizontalOptions="Center" HeightRequest="200"></Image>
+        <HorizontalStackLayout Spacing="10">
+        <Label HorizontalTextAlignment="Start" VerticalTextAlignment="Center" Text="Email" WidthRequest="75"></Label>
+        <Entry Text="{Binding Email}"
+            Placeholder="Email" WidthRequest="200"></Entry>
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Spacing="10">
+            <Label Text="Password" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" WidthRequest="75" ></Label>
+            <Entry Text="{Binding Password}" IsPassword="True"
+                Placeholder="Password" WidthRequest="200"></Entry>
+        </HorizontalStackLayout>
+        <Button x:Name="Btn_Proceed" Command="{Binding ProceedCommand}" Text="Proceed" ></Button>
+    </VerticalStackLayout>
+
+</ContentPage>
